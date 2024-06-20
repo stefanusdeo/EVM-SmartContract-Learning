@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.0; 
 
 //lokasi data
 
@@ -10,6 +10,10 @@ pragma solidity ^0.8.0;
 //stack
 
 contract Location{
+
+// uint = hanya nilai positif
+// int = bisa nilai negatif dan nilai bilangan bulat
+
 
 // type values
     function iniFungsi()public pure returns(uint) {
