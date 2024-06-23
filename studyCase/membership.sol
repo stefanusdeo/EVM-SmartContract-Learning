@@ -19,7 +19,7 @@ contract MemberShip {
 }
 
 contract MemberShipUpgrade {
-    uint memberId;
+    uint memberId =1;
     struct Member {
         uint256 Id;
         string name;
