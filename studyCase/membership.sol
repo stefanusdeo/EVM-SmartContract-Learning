@@ -20,6 +20,9 @@ contract MemberShip {
 
 contract MemberShipUpgrade {
     uint memberId;
+
+    address public owner;
+
     struct Member {
         uint256 Id;
         string name;
@@ -27,25 +30,38 @@ contract MemberShipUpgrade {
         bool membershipType;
     }
 
-    enum memberType { Active, NotActive }
-    mapping (address => Member) members;
+    enum MemberType { Active, NotActive }
+    mapping (address => Member) public members;
+    error NotAuthorized();
 
-    function addMember(address _member, string memory _name, uint256 _balance, memberType _membershipType) external {
-        memberId++; 
+    constructor() { // dijalankan saat pertama kali dideploy
+        owner=msg.sender;
+    }
 
+    modifier onlyOwner(){ //tidak disarankan karna terlalu mahal untuk gasnya. ini seperti middleware,
+        if(owner != msg.sender) revert NotAuthorized();
+        _;
+    }
+
+    function addMember(address _member, string calldata _name, uint256 _balance, MemberType _membershipType) external {
         members[_member] = Member({
-            Id: memberId,
+            Id: ++memberId,
             name: _name,
             balance: _balance,
-            membershipType: _membershipType == memberType.Active
+            membershipType: _membershipType == MemberType.Active
         });
     }
-    
-    function isMember(address _member) external view returns (bool) {
-        return members[_member].Id != 0;
+
+// calldata bersifat constant jika memory tidak.
+    function editMember(address _member, string calldata _name, uint256 _balance, MemberType _membershipType) external {
+
+        members[_member].name = _name;
+        members[_member].balance = _balance;
+        members[_member].membershipType = _membershipType == MemberType.Active;
+
     }
 
-    function removeMember(address _member) external {
+    function removeMember(address _member) external onlyOwner{
         delete members[_member];
     }
     
