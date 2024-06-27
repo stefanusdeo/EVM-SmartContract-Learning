@@ -18,6 +18,7 @@ contract MemberShip {
     
 }
 
+
 contract MemberShipUpgrade {
     uint memberId;
 
@@ -44,6 +45,8 @@ contract MemberShipUpgrade {
     }
 
     function addMember(address _member, string calldata _name, uint256 _balance, MemberType _membershipType) external {
+        // revert("okee");
+        require(members[_member].Id == 0, "Salah");
         members[_member] = Member({
             Id: ++memberId,
             name: _name,
@@ -53,11 +56,11 @@ contract MemberShipUpgrade {
     }
 
 // calldata bersifat constant jika memory tidak.
-    function editMember(address _member, string calldata _name, uint256 _balance, MemberType _membershipType) external {
+    function editMember(string calldata _name, uint256 _balance, MemberType _membershipType) external {
 
-        members[_member].name = _name;
-        members[_member].balance = _balance;
-        members[_member].membershipType = _membershipType == MemberType.Active;
+        members[msg.sender].name = _name;
+        members[msg.sender].balance = _balance;
+        members[msg.sender].membershipType = _membershipType == MemberType.Active;
 
     }
 
