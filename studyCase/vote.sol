@@ -18,6 +18,8 @@ contract Votting {
     mapping (uint => Candidate) public candidates;
     mapping (address=>bool) historyVote;
 
+    uint[] public candidateIDs;
+
     error AccessDenied();
 
     event votedEvent(address addresVoter,uint candidateId);
@@ -29,6 +31,7 @@ contract Votting {
 
     function addCandidate(string memory _name) external onlyOwner {
         uint numVote=++numberVote;
+        candidateIDs.push(numVote);
 
         candidates[numVote]= Candidate({
             id:numVote,
