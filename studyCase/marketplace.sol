@@ -17,6 +17,8 @@ contract Marketplace{
 
     mapping(uint => address payable) public owners;
 
+    mapping(address => uint) balance;
+
     event FundsWithdrawn(address seller, uint amount);
 
     event ItemPurchased(uint id, string name, address buyer, address seller);
@@ -45,18 +47,22 @@ contract Marketplace{
         owners[_id] = payable(msg.sender);
         items[_id].sold = true;
 
-        items[_id].seller.transfer(msg.value);
+        balance[items[_id].seller]+= items[_id].price;
+
+        // items[_id].seller.transfer(msg.value);
 
         emit ItemPurchased(_id, items[_id].name, msg.sender, items[_id].seller);
     }
 
     function withdraw() public {
         address payable seller = payable(msg.sender);
-        uint amount = address(this).balance; 
+        uint amount = balance[msg.sender];
 
         require(amount > 0, "No funds to withdraw");
 
         seller.transfer(amount);
+
+        balance[msg.sender] = 0;
 
         emit FundsWithdrawn(seller, amount);
     }
