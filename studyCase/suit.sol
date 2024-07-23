@@ -49,7 +49,7 @@ contract RockPaperScissors {
         address winner;
 
         if (move1 == move2) {
-            winner = address(0); // Draw
+            winner = address(0);
         } else if ((move1 == Move.Rock && move2 == Move.Scissors) ||
                    (move1 == Move.Scissors && move2 == Move.Paper) ||
                    (move1 == Move.Paper && move2 == Move.Rock)) {
